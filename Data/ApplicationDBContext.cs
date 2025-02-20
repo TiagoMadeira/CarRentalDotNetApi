@@ -17,6 +17,7 @@ namespace api.Data
         }
         public  DbSet<Rental> Rentals {get; set;}
         public  DbSet<BlockedDate> BlockedDates {get; set;}
+        public  DbSet<Vehicle> Vehicles {get; set;}
 
     }
 }
