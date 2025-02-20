@@ -17,8 +17,8 @@ namespace api.Controllers
             _context = context;
         }
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id){
-            var rental = _context.Rentals.Find(id);
+        public async Task<IActionResult> GetById([FromRoute] int id){
+            var rental = await _context.Rentals.FindAsync(id);
             if(rental == null)
             {
                 return NotFound();
