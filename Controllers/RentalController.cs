@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,14 +12,15 @@ namespace api.Controllers
     [ApiController]
     public class RentalController : ControllerBase
     {
-        private readonly ApplicationDBContext _context;
-        public RentalController(ApplicationDBContext context)
+        private readonly IRentalRepository _rentalRepo;
+        public RentalController( IRentalRepository rentalRepo)
         {
-            _context = context;
+            _rentalRepo = rentalRepo;
+
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id){
-            var rental = await _context.Rentals.FindAsync(id);
+            var rental = await _rentalRepo.GetByIdAsync(id) ;
             if(rental == null)
             {
                 return NotFound();
