@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.Identity.Client;
 
 namespace api.Data
@@ -13,7 +14,13 @@ namespace api.Data
     {
         public ApplicationDBContext(DbContextOptions dbContextOptions)
         : base(dbContextOptions)
+        {   
+            
+        }
+        protected override void ConfigureConventions(ModelConfigurationBuilder modelBuilder)
         {
+            modelBuilder.Conventions.Remove<CascadeDeleteConvention>();
+            base.ConfigureConventions(modelBuilder);
         }
         public  DbSet<Rental> Rentals {get; set;}
         public  DbSet<BlockedDate> BlockedDates {get; set;}
