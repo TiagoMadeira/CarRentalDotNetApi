@@ -14,6 +14,9 @@ namespace api.Models
         public int VehicleId {get; set;}
         [ForeignKey("RentalId")]
         public Vehicle Vehicle {get; set;}
+        public string AppUserId {get; set;}
+        [ForeignKey("AppUserId")]
+        public AppUser AppUser {get; set;}
 
     }
 }

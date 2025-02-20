@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Identity;
 namespace api.Models
 {
     public class AppUser : IdentityUser
-    {
+    {   
+        public int Id {get; set;}
         public string Name {get; set;} = string.Empty;
+        public List<Rental>? Rentals {get; set;}
 
     }
 }
