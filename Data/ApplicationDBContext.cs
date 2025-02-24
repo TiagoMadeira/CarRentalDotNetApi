@@ -23,7 +23,7 @@ namespace api.Data
             modelBuilder.Conventions.Remove<CascadeDeleteConvention>();
             base.ConfigureConventions(modelBuilder);
         }
-        protected override void OodelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             List<IdentityRole> roles = new List<IdentityRole>
