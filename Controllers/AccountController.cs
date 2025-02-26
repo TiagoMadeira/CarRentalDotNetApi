@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace api.Controllers
 {
-    [Route("[api/account]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccountController : Controller
     {
@@ -31,8 +31,8 @@ namespace api.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(x=> x.UserName == loginDto.Username.ToLower());
-            if (user == null) return Unauthorized("Invalid username!");
+            var user = await _userManager.Users.FirstOrDefaultAsync(x=> x.Email == loginDto.Email.ToLower());
+            if (user == null) return Unauthorized("Invalid email!");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
@@ -42,7 +42,7 @@ namespace api.Controllers
                 new NewUserDto
                 {
                     UserName = user.UserName,
-                    Email = user.Email,
+                    Email = user.Email, 
                     Token = _tokenService.CreateToken(user)
                 }
             );
