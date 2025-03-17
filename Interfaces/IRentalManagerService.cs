@@ -7,10 +7,9 @@ using api.Models;
 
 namespace api.Interfaces
 {
-    public interface IRentalRepository
+    public interface IRentalManagerService
     {
-        Task<Rental?> GetByIdAsync(int id);
+        Task<Rental> CreateAsync(string userId, CreateRentalRequestDto createRentalRequestDto);
 
-        Task<Rental> CreateAsync(Rental rentalModel);
     }
 }

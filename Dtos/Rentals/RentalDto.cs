@@ -12,7 +12,7 @@ namespace api.Dtos
         public DateOnly EndDate {get; set;}
         public int VehicleId {get; set;}
         public string VehicleDescription {get; set;}
-        public string AppUserId {get; set;}
+        public string UserId {get; set;}
         public string UserName {get; set;}
     }
 }

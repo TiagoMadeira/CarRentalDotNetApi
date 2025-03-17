@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos;
+using api.Dtos.Rentals;
 using api.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace api.Mappers
 {
@@ -24,6 +26,15 @@ namespace api.Mappers
             UserId = rentalModel.AppUserId,
             UserName = rentalModel.AppUser.Name
         };
-       }
+       } 
+
+        public static Rental ToRentalFromCreateRequestDto(this CreateRentalRequestDto createRentalRequestDto, int blockedDateId, string userId)
+        {
+            return new Rental{
+                VehicleId = createRentalRequestDto.VehicleId,
+                AppUserId = userId,
+                BlockedDateId = blockedDateId
+            };
+        }
     }
 }

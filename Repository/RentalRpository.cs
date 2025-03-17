@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Dtos.Rentals;
 using api.Interfaces;
 using api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
 {
@@ -19,5 +21,23 @@ namespace api.Repository
         {
             return await _context.Rentals.FindAsync(id);
         }
+
+        public async Task<Rental> CreateAsync(Rental rentalModel)
+        {
+            await _context.Rentals.AddAsync(rentalModel);
+            await _context.SaveChangesAsync();
+            return rentalModel;
+        }
+
+        public async Task<Rental?> DeleteAsync(int id)
+        {
+            var rentalModel = await _context.Rentals.FirstOrDefaultAsync(x => x.Id == id);
+            if(rentalModel == null)
+                return null;
+            _context.Rentals.Remove(rentalModel);
+            await _context.SaveChangesAsync();
+            return rentalModel;
+
+        }   
     }
 }
