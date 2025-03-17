@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using api.Dtos.Account;
 using api.Models;
 using api.Service;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
