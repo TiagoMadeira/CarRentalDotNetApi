@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
-{   [Route("api/rental")]
+{   [Route("api/[controller]")]
     [ApiController]
     public class RentalController : ControllerBase
     {   
@@ -30,7 +30,7 @@ namespace api.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateRental([FromBody] CreateRentalRequestDto createRentalRequestDto){
             var  userId = HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.NameId);
             var rental = await _rentalManager.CreateAsync(userId, createRentalRequestDto);
