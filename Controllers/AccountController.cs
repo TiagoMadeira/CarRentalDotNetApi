@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using api.Dtos.Account;
 using api.Models;
 using api.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,7 @@ namespace api.Controllers
                 return BadRequest(ModelState);
 
             var user = await _userManager.Users.FirstOrDefaultAsync(x=> x.Email == loginDto.Email.ToLower());
+
             if (user == null) return Unauthorized("Invalid email!");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
