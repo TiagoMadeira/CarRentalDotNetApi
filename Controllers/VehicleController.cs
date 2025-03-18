@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class VehicleController : Controller
     {
          private readonly IVehicleRepository _vehicleRepo;
@@ -26,10 +26,14 @@ namespace api.Controllers
         [Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> CreateVehicle([FromBody] CreateVehicleRequestDto createVehicleRequestDto){
-            var  userId = HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.NameId);
-            var vehicleModel = createVehicleRequestDto.ToVehicleFromCreateRequestDto(userId);
-            var vehicle = await _vehicleRepo.CreateAsync(vehicleModel);
-            return CreatedAtAction(nameof(GetById), new {id = vehicle.Id}, vehicle.ToVehicleDto());
+             var  userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId !=null){
+                var vehicleModel = createVehicleRequestDto.ToVehicleFromCreateRequestDto(userId);
+                var vehicle = await _vehicleRepo.CreateAsync(vehicleModel);
+
+                return CreatedAtAction(nameof(GetById), new {id = vehicle.Id}, vehicle.ToVehicleDto());
+            }
+            return UnprocessableEntity();
         }
 
         [Authorize]

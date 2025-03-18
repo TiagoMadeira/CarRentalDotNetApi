@@ -16,9 +16,9 @@ namespace api.Mappers
             Id = vehicleModel.Id,
             Model = vehicleModel.Model,
             Brand = vehicleModel.Brand,
-            Category = vehicleModel.Category,
-            Transmission = vehicleModel.Transmission,
-            VehicleType = vehicleModel.VehicleType,
+            Category = vehicleModel?.Category?.ToString(),
+            Transmission = vehicleModel?.Transmission?.ToString(),
+            VehicleType = vehicleModel?.VehicleType?.ToString(),
             AppUserId = vehicleModel.AppUserId
           
         };
@@ -28,9 +28,9 @@ namespace api.Mappers
             return new Vehicle{
                 Model = createVehicleRequestDto.Model,
                 Brand = createVehicleRequestDto.Brand,
-                Category = createVehicleRequestDto.Category,
-                Transmission = createVehicleRequestDto.Transmission,
-                VehicleType = createVehicleRequestDto.VehicleType,
+                Category = (categoryNames) Enum.Parse(typeof(categoryNames), createVehicleRequestDto.Category),
+                Transmission = (transmissionNames) Enum.Parse(typeof(transmissionNames), createVehicleRequestDto.Transmission),
+                VehicleType = (vehicleTypeNames) Enum.Parse(typeof(vehicleTypeNames), createVehicleRequestDto.VehicleType),
                 AppUserId = userId
             };
         } 

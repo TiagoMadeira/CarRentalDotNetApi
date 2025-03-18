@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 namespace api.Models
 {
     public enum categoryNames {
-        small, maedium, big, suv, truck
+        small, 
+        medium, 
+        big, 
+        suv, 
+        truck
     }
     public enum transmissionNames{
         manual, auto
@@ -20,9 +24,9 @@ namespace api.Models
         public int Id {get; set;}
         public string Model {get; set;}
         public string Brand {get; set;}
-        public categoryNames Category {get; set;}
-        public transmissionNames Transmission {get; set;}
-        public vehicleTypeNames VehicleType {get; set;}
+        public categoryNames? Category {get; set;}
+        public transmissionNames? Transmission {get; set;}
+        public vehicleTypeNames? VehicleType {get; set;}
         public List<Rental>? Rentals {get; set;}
         public string AppUserId {get; set;}
         [ForeignKey("AppUserId")]

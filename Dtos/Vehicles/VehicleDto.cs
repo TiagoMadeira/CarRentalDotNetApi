@@ -11,9 +11,9 @@ namespace api.Dtos.Vehicles
         public int Id {get; set;}
         public string Model {get; set;}
         public string Brand {get; set;}
-        public categoryNames Category {get; set;}
-        public transmissionNames Transmission {get; set;}
-        public vehicleTypeNames VehicleType {get; set;}
+        public string Category {get; set;}
+        public string Transmission {get; set;}
+        public string VehicleType {get; set;}
         public string AppUserId {get; set;}
     }
 }
