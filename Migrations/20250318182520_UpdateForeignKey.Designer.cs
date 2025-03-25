@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -11,9 +12,11 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250318182520_UpdateForeignKey")]
+    partial class UpdateForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -251,10 +254,17 @@ namespace api.Migrations
                     b.Property<DateOnly>("EndDate")
                         .HasColumnType("date");
 
+                    b.Property<int?>("RentalId")
+                        .HasColumnType("int");
+
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RentalId")
+                        .IsUnique()
+                        .HasFilter("[RentalId] IS NOT NULL");
 
                     b.ToTable("BlockedDates");
                 });
@@ -280,9 +290,6 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
-
-                    b.HasIndex("BlockedDateId")
-                        .IsUnique();
 
                     b.HasIndex("VehicleId");
 
@@ -376,17 +383,21 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("api.Models.BlockedDate", b =>
+                {
+                    b.HasOne("api.Models.Rental", "Rental")
+                        .WithOne("BlockedDate")
+                        .HasForeignKey("api.Models.BlockedDate", "RentalId");
+
+                    b.Navigation("Rental");
+                });
+
             modelBuilder.Entity("api.Models.Rental", b =>
                 {
                     b.HasOne("api.Models.AppUser", "AppUser")
                         .WithMany("Rentals")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("api.Models.BlockedDate", "BlockedDate")
-                        .WithOne("Rental")
-                        .HasForeignKey("api.Models.Rental", "BlockedDateId")
                         .IsRequired();
 
                     b.HasOne("api.Models.Vehicle", "Vehicle")
@@ -396,8 +407,6 @@ namespace api.Migrations
                         .IsRequired();
 
                     b.Navigation("AppUser");
-
-                    b.Navigation("BlockedDate");
 
                     b.Navigation("Vehicle");
                 });
@@ -419,9 +428,10 @@ namespace api.Migrations
                     b.Navigation("Vehicles");
                 });
 
-            modelBuilder.Entity("api.Models.BlockedDate", b =>
+            modelBuilder.Entity("api.Models.Rental", b =>
                 {
-                    b.Navigation("Rental");
+                    b.Navigation("BlockedDate")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("api.Models.Vehicle", b =>

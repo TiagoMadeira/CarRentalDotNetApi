@@ -19,7 +19,10 @@ namespace api.Repository
         }
         public async Task<Rental?> GetByIdAsync(int id)
         {
-            return await _context.Rentals.FindAsync(id);
+            return await _context.Rentals.Include(r => r.BlockedDate)
+                                        .Include(r => r.Vehicle)
+                                        .Include(r => r.AppUser)
+                                        .FirstOrDefaultAsync(r => r.Id == id);
         }
 
         public async Task<Rental> CreateAsync(Rental rentalModel)

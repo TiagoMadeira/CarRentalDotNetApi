@@ -11,8 +11,6 @@ namespace api.Models
         public int Id {get; set;}
         public DateOnly StartDate {get; set;} 
         public DateOnly EndDate {get; set;} 
-        public int? RentalId {get; set;} 
-        [ForeignKey("RentalId")]
         public Rental? Rental {get; set;}
 
 

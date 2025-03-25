@@ -32,7 +32,7 @@ namespace api.Controllers
         [Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> CreateRental([FromBody] CreateRentalRequestDto createRentalRequestDto){
-            var  userId = HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.NameId);
+            var  userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var rental = await _rentalManager.CreateAsync(userId, createRentalRequestDto);
             return CreatedAtAction(nameof(GetById), new {id = rental.Id}, rental.ToRentalDto());
         }

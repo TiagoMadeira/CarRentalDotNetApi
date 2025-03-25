@@ -78,7 +78,9 @@ builder.Services.AddAuthentication(options =>{
 });
 
 builder.Services.AddScoped<IRentalRepository, RentalRpository>();
+builder.Services.AddScoped<IBlockedDateRepository, BlockedDateRepository>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+builder.Services.AddScoped<IRentalManagerService, RentalManagerService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 var app = builder.Build();
 

@@ -2,13 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace api.Dtos.Rentals
 {
     public class CreateRentalRequestDto
     {
-        public DateOnly StartDate {get; set;}
-        public DateOnly EndDate {get; set;}
+        [JsonProperty(PropertyName = "start_date")]
+        public string StartDate {get; set;}
+        [JsonProperty(PropertyName = "end_date")]
+        public string EndDate {get; set;}
+        [JsonProperty(PropertyName = "vehicle_id")]
         public int VehicleId {get; set;}
 
     }

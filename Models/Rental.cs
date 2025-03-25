@@ -10,9 +10,10 @@ namespace api.Models
     {
         public int Id {get; set;}
         public int BlockedDateId {get; set;}
+        [ForeignKey("BlockedDateId")]
         public BlockedDate BlockedDate {get; set;}
         public int VehicleId {get; set;}
-        [ForeignKey("RentalId")]
+        [ForeignKey("VehicleId")]
         public Vehicle Vehicle {get; set;}
         public string AppUserId {get; set;}
         [ForeignKey("AppUserId")]

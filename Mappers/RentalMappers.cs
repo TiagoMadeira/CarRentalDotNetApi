@@ -16,15 +16,15 @@ namespace api.Mappers
         return new RentalDto
         {
             Id = rentalModel.Id,
-            StartDate=rentalModel.BlockedDate.StartDate,
-            EndDate=rentalModel.BlockedDate.EndDate,
+            StartDate= rentalModel.BlockedDate.StartDate.ToString(),
+            EndDate=rentalModel.BlockedDate.EndDate.ToString(),
             VehicleId = rentalModel.VehicleId,
             VehicleDescription = string.Format("{0} {1} {2}", 
-                                    rentalModel.Vehicle.Brand,
-                                    rentalModel.Vehicle.Model,
-                                    rentalModel.Vehicle.VehicleType),
+                                    rentalModel.Vehicle.Brand.ToString(),
+                                    rentalModel.Vehicle.Model.ToString(),
+                                    rentalModel.Vehicle.VehicleType.ToString()),
             UserId = rentalModel.AppUserId,
-            UserName = rentalModel.AppUser.Name
+            UserName = rentalModel.AppUser.UserName
         };
        } 
 

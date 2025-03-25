@@ -13,9 +13,10 @@ namespace api.Service
     {   
         private readonly IRentalRepository _rentalRepo;
         private readonly IBlockedDateRepository _blockedDateRepo;
-        public RentalManagerService(IRentalRepository rentalRepo )
+        public RentalManagerService(IRentalRepository rentalRepo, IBlockedDateRepository blockedDateRepo )
         {
             _rentalRepo = rentalRepo;
+            _blockedDateRepo = blockedDateRepo;
         }
 
         public async Task<Rental> CreateAsync(string userId, CreateRentalRequestDto createRentalRequestDto)
@@ -24,8 +25,8 @@ namespace api.Service
             await _blockedDateRepo.CreateAsync(blockedDate);
             var rentalModel = createRentalRequestDto.ToRentalFromCreateRequestDto( blockedDate.Id, userId);
             await _rentalRepo.CreateAsync(rentalModel);
-            return rentalModel;
-
+            
+            return await  _rentalRepo.GetByIdAsync(rentalModel.Id);
         }
 
         public Task<Rental?> UpdateAsync(int id, UpdateRentalRequestDto updateRentalRequestDto)

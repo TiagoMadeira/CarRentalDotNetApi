@@ -13,8 +13,8 @@ namespace api.Mappers
        {
         return new BlockedDate
         {
-            StartDate=createRentalRequestDto.StartDate,
-            EndDate=createRentalRequestDto.EndDate,
+            StartDate = DateOnly.Parse(createRentalRequestDto.StartDate),
+            EndDate = DateOnly.Parse(createRentalRequestDto.EndDate),
         };
        }
     }
