@@ -13,6 +13,5 @@ namespace api.Models
         public DateOnly EndDate {get; set;} 
         public Rental? Rental {get; set;}
 
-
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-
+using api.Helpers;
 namespace api.Models
 {
     public enum categoryNames {
@@ -31,5 +31,18 @@ namespace api.Models
         public string AppUserId {get; set;}
         [ForeignKey("AppUserId")]
         public AppUser AppUser {get; set;}
+
+        public Boolean IsVehicleAvailable(DateOnly StartDate, DateOnly EndDate){
+            if (Rentals == null){
+                return true;
+            }
+            foreach (Rental rental in Rentals){
+                if (DateHelperMethods.AreOverlapping(StartDate, EndDate, rental.BlockedDate.StartDate, rental.BlockedDate.EndDate)){
+                    return false;
+                }
+            }
+            return true;
+            
+        }
     }
 }

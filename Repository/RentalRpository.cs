@@ -17,6 +17,8 @@ namespace api.Repository
         {
             _context = context;
         }
+
+        //CRUD
         public async Task<Rental?> GetByIdAsync(int id)
         {
             return await _context.Rentals.Include(r => r.BlockedDate)
@@ -41,6 +43,7 @@ namespace api.Repository
             await _context.SaveChangesAsync();
             return rentalModel;
 
-        }   
+        }
+
     }
 }
