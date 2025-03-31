@@ -1,5 +1,6 @@
 using api.Data;
 using api.Interfaces;
+using api.Middleware;
 using api.Models;
 using api.Repository;
 using api.Service;
@@ -95,4 +96,5 @@ app.MapControllers();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.Run();
