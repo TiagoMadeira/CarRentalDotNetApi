@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using api.Dtos.Account;
 using api.Models;
 using api.Service;
+using api.Validation.InputValidators.cs;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,10 +29,9 @@ namespace api.Controllers
         }
 
         [HttpPost("login")]
-         public async Task<IActionResult> Login([FromBody] LoginDto loginDto){
+         public async Task<IActionResult> Login([FromBody] LoginDto loginDto, IValidator<LoginDtoValidator> validator){
 
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
+            validator.ValidateAndThrow(loginDto);
 
             var user = await _userManager.Users.FirstOrDefaultAsync(x=> x.Email == loginDto.Email.ToLower());
 
@@ -52,7 +53,7 @@ namespace api.Controllers
 
          }
         [HttpPost ("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto){
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto, IValidator<RegisterDto> validator){
             try
             {
                 if(!ModelState.IsValid)
