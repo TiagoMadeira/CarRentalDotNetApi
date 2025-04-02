@@ -22,7 +22,7 @@ namespace api.Middleware
             _logger = logger;
         }
 
-        public async Task InvlokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
