@@ -7,7 +7,7 @@ using FluentValidation;
 
 namespace api.Validation.InputValidators.cs
 {
-    public class LoginDtoValidator : AbstractValidator<LoginDto>
+    public class LoginDtoValidator : AbstractValidator<LoginRequestDto>
     {
         public LoginDtoValidator()
         {

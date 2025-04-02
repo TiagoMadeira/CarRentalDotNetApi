@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Account;
+using api.Interfaces;
 using api.Models;
 using api.Service;
 using api.Validation.InputValidators.cs;
@@ -19,46 +20,26 @@ namespace api.Controllers
     [ApiController]
     public class AccountController : Controller
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly ITokenService _tokenService;
-        private readonly SignInManager<AppUser> _signInManager;
-        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService , SignInManager<AppUser> signInManager) {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _tokenService = tokenService;
+        private readonly IAuthService _authService;
+      
+        public AccountController(IAuthService authService) {
+          _authService = authService;
         }
-
         [HttpPost("login")]
-         public async Task<IActionResult> Login([FromBody] LoginDto loginDto, IValidator<LoginDtoValidator> validator){
+         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto, IValidator<LoginRequestDto> validator){
 
-            validator.ValidateAndThrow(loginDto);
+            validator.ValidateAndThrow(loginRequestDto);
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(x=> x.Email == loginDto.Email.ToLower());
-
-            if (user == null) return Unauthorized("Invalid email!");
-
-            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-
-            if(!result.Succeeded)return Unauthorized("Username not found and or password incorrect!");
+            var loginDto = _authService.LoginAsync(loginRequestDto);
             
-            return Ok(
-                new NewUserDto
-                {
-                    UserName = user.UserName,
-                    Email = user.Email, 
-                    Token = _tokenService.CreateToken(user)
-                }
-            );
+            return Ok(loginDto);
             
 
          }
         [HttpPost ("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto, IValidator<RegisterDto> validator){
-            try
-            {
-                if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerDto, IValidator<RegisterRequestDto> validator){
+                
+             validator.ValidateAndThrow(registerDto);
                 var appUser = new AppUser
                 {
                     UserName = registerDto.Username,
@@ -77,7 +58,6 @@ namespace api.Controllers
                         {
                             UserName = appUser.UserName,
                             Email = appUser.Email,
-                            Token = _tokenService.CreateToken(appUser)
                         }
                        );
                     }
@@ -90,11 +70,6 @@ namespace api.Controllers
                 {
                      return StatusCode(500, createdUser.Errors);
                 }
-            }
-            catch (Exception e)
-            {
-               return StatusCode(500, e);
-            }
         }
     }
 }
