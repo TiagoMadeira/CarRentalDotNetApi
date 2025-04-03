@@ -39,37 +39,12 @@ namespace api.Controllers
         [HttpPost ("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerDto, IValidator<RegisterRequestDto> validator){
                 
-             validator.ValidateAndThrow(registerDto);
-                var appUser = new AppUser
-                {
-                    UserName = registerDto.Username,
-                    Email = registerDto.Email,
-                };
+            validator.ValidateAndThrow(registerDto);
 
-                var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
+            var newUserDto = _authService.RegisterAsync(registerDto);
 
-                if(createdUser.Succeeded)
-                {
-                    var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
-                    if(roleResult.Succeeded)
-                    {
-                       return Ok(
-                        new NewUserDto
-                        {
-                            UserName = appUser.UserName,
-                            Email = appUser.Email,
-                        }
-                       );
-                    }
-                    else
-                    {
-                        return StatusCode(500, roleResult.Errors);
-                    }
-                }
-                else
-                {
-                     return StatusCode(500, createdUser.Errors);
-                }
+            return Ok(newUserDto);
+                
         }
     }
 }
