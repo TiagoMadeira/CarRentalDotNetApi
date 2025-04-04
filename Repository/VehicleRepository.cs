@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Data;
 using api.Interfaces;
 using api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
 {
@@ -27,6 +28,11 @@ namespace api.Repository
         public async Task<Vehicle?> GetByIdAsync(int id)
         {
             return await _context.Vehicles.FindAsync(id);
+        }
+
+        public async Task<Boolean> VehicleExistsAsync(int id)
+        {
+            return await _context.Vehicles.AnyAsync(v => v.Id == id);
         }
     }
 }

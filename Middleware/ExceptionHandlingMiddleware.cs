@@ -50,7 +50,6 @@ namespace api.Middleware
 
                 details.Title = "Exception Occured";
                 details.Status = StatusCodes.Status500InternalServerError;
-
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 await context.Response.WriteAsJsonAsync(details);
             }

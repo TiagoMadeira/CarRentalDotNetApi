@@ -9,6 +9,7 @@ using api.Dtos.Rentals;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,20 +19,16 @@ namespace api.Controllers
     [ApiController]
     public class RentalController : ControllerBase
     {   
-        private readonly UserManager<AppUser> _userManager;
-        private readonly IRentalRepository _rentalRepo;
         private readonly IRentalManagerService _rentalManager;
-        public RentalController( IRentalRepository rentalRepo, IRentalManagerService rentalManager, UserManager<AppUser> userManager)
+        public RentalController(  IRentalManagerService rentalManager, UserManager<AppUser> userManager)
         {
-            _rentalRepo = rentalRepo;
             _rentalManager = rentalManager;
-            _userManager = userManager;
-
         }
 
         [Authorize]
         [HttpPost("create")]
-        public async Task<IActionResult> CreateRental([FromBody] CreateRentalRequestDto createRentalRequestDto){
+        public async Task<IActionResult> CreateRental([FromBody] CreateRentalRequestDto createRentalRequestDto, IValidator<CreateRentalRequestDto> validator){
+            await validator.ValidateAndThrowAsync(createRentalRequestDto);
             var  userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var rental = await _rentalManager.CreateAsync(userId, createRentalRequestDto);
             return CreatedAtAction(nameof(GetById), new {id = rental.Id}, rental.ToRentalDto());
@@ -40,7 +37,7 @@ namespace api.Controllers
         [Authorize]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id){
-            var rental = await _rentalRepo.GetByIdAsync(id) ;
+            var rental = await _rentalManager.GetByIdAsync(id) ;
             if(rental == null)
             {
                 return NotFound();

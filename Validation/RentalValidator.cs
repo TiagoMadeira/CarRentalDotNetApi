@@ -25,7 +25,7 @@ namespace api.Validation
 
             RuleFor(rental => rental.Vehicle)
             .Must((rental, vehicle) => {return vehicle.IsVehicleAvailable(rental.BlockedDate.StartDate, rental.BlockedDate.EndDate) == true;})
-            .WithMessage("Vehicle is not available for iserted blockedDates");
+            .WithMessage("Vehicle is not available for iserted Dates");
         }
     }
 }

@@ -33,6 +33,9 @@ namespace api.Service
             return await  _rentalRepo.GetByIdAsync(rentalModel.Id);
         }
 
+        public async Task<Rental?> GetByIdAsync(int Id){
+            return await _rentalRepo.GetByIdAsync(Id);
+        }
         public Task<Rental?> UpdateAsync(int id, UpdateRentalRequestDto updateRentalRequestDto)
         {
             throw new NotImplementedException();

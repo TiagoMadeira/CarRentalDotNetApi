@@ -11,5 +11,7 @@ namespace api.Interfaces
         Task<Vehicle?> GetByIdAsync(int id);
 
         Task<Vehicle> CreateAsync(Vehicle vehicleModel);
+
+        Task<Boolean> VehicleExistsAsync(int id);
     }
 }

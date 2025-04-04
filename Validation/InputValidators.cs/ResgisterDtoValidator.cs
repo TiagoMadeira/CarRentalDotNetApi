@@ -28,10 +28,6 @@ namespace api.Validation.InputValidators.cs
             RuleFor(x => x.Password)
             .NotEmpty()
             .NotNull().WithMessage("Password is required");
-
-            RuleFor(x => x.Password)
-            .NotEmpty()
-            .NotNull().WithMessage("Password is required");
         }
     }
 }
