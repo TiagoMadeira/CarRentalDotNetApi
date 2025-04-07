@@ -11,5 +11,6 @@ namespace api.Interfaces
     
         Task<BlockedDate> CreateAsync(BlockedDate blockedDateModel);
 
+        Task<BlockedDate> UpdateAsync(int Id, BlockedDate blockedDateModel);
     }
     }

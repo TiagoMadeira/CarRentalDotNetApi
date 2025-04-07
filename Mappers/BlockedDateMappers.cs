@@ -17,5 +17,14 @@ namespace api.Mappers
             EndDate = DateOnly.Parse(createRentalRequestDto.EndDate),
         };
        }
+
+        public static BlockedDate ToBlockedDateFromUpdateRequestDto(this UpdateRentalRequestDto updateRentalRequestDto)
+       {
+        return new BlockedDate
+        {
+            StartDate = DateOnly.Parse(updateRentalRequestDto.StartDate),
+            EndDate = DateOnly.Parse(updateRentalRequestDto.EndDate),
+        };
+       }
     }
 }

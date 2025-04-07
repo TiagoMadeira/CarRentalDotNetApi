@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Data;
 using api.Interfaces;
 using api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
 {
@@ -20,6 +21,15 @@ namespace api.Repository
             await _context.BlockedDates.AddAsync(blockedDateModel);
             await _context.SaveChangesAsync();
             return blockedDateModel;
+        }
+
+        public async Task<BlockedDate> UpdateAsync(int Id, BlockedDate blockedDateModel)
+        {
+            var blockedDate = await _context.BlockedDates.FirstOrDefaultAsync(x => x.Id == Id);
+            blockedDate.StartDate = blockedDateModel.StartDate;
+            blockedDate.EndDate = blockedDateModel.EndDate;
+            await _context.SaveChangesAsync();
+            return blockedDate;
         }
     }
 }

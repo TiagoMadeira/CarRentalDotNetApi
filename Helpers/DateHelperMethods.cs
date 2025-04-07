@@ -11,6 +11,10 @@ namespace api.Helpers
         {
             return startDate1 < endDate2 && startDate2 < endDate1;
         }
+
+        public static DateOnly Today(){
+            return DateOnly.FromDateTime(DateTime.Now);
+        }
     }
 }
     

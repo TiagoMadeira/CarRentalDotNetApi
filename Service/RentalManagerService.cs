@@ -23,11 +23,13 @@ namespace api.Service
         public async Task<Rental> CreateAsync(string userId, CreateRentalRequestDto createRentalRequestDto)
         {   
             //Build Blocked Date
-            var blockedDate = BuildBlockedDate(createRentalRequestDto);
+            var blockedDate = createRentalRequestDto.ToBlockedDateFromCreateRequestDto();
+            ValidateBlockedDate(blockedDate);
             await _blockedDateRepo.CreateAsync(blockedDate);
 
             //Build Rental
-            var rentalModel = BuildRental(createRentalRequestDto,  blockedDate.Id, userId);
+            var rentalModel = createRentalRequestDto.ToRentalFromCreateRequestDto( blockedDate.Id, userId);
+            ValidateRental(rentalModel);
             await _rentalRepo.CreateAsync(rentalModel);
             
             return await  _rentalRepo.GetByIdAsync(rentalModel.Id);
@@ -36,39 +38,33 @@ namespace api.Service
         public async Task<Rental?> GetByIdAsync(int Id){
             return await _rentalRepo.GetByIdAsync(Id);
         }
-        public Task<Rental?> UpdateAsync(int id, UpdateRentalRequestDto updateRentalRequestDto)
+        public async Task<Rental?> UpdateAsync(int id, UpdateRentalRequestDto updateRentalRequestDto)
         {
-            throw new NotImplementedException();
+            var rental = await _rentalRepo.GetByIdAsync(id);
+            if(rental == null){
+                throw new BadHttpRequestException("Rental does not exist");
+            }
+            var blockedDate = updateRentalRequestDto.ToBlockedDateFromUpdateRequestDto();
+            ValidateBlockedDate(blockedDate);
+            await _blockedDateRepo.UpdateAsync(rental.BlockedDateId, blockedDate);
+            return rental;
         }
 
-        private static BlockedDate BuildBlockedDate(CreateRentalRequestDto createRentalRequestDto)
-        {
-            var blockedDate = createRentalRequestDto.ToBlockedDateFromCreateRequestDto();
+        private void ValidateBlockedDate(BlockedDate blockedDate){
             var blockedDateValidator = new BlockedDateValidator();
             var validationResult = blockedDateValidator.Validate(blockedDate);
 
             if(!validationResult.IsValid)
                 throw new BadHttpRequestException(validationResult.ToString());
 
-             return blockedDate;
         }
 
-        private static Rental BuildRental(CreateRentalRequestDto createRentalRequestDto, int BlockedDateId, string userId)
-        {
-            var rentalModel = createRentalRequestDto.ToRentalFromCreateRequestDto( BlockedDateId, userId);
+        private void ValidateRental(Rental rental){
             var rentalValidator = new RentalValidator();
-            var validationResult = rentalValidator.Validate(rentalModel);
+            var validationResult = rentalValidator.Validate(rental);
 
             if(!validationResult.IsValid)
                 throw new BadHttpRequestException(validationResult.ToString());
-
-             return rentalModel;
         }
-
-       
-
-        
-
-
     }
 }

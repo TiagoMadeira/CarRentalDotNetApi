@@ -9,6 +9,7 @@ using api.Dtos.Rentals;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using api.Service;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -42,6 +43,15 @@ namespace api.Controllers
             {
                 return NotFound();
             }
+            return Ok(rental.ToRentalDto());
+        }
+
+        [Authorize]
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateRentalRequestDto updateRentalRequestDto, IValidator<UpdateRentalRequestDto> validator){
+            validator.ValidateAndThrow(updateRentalRequestDto);
+            var rental = _rentalManager.UpdateAsync(id,updateRentalRequestDto );
+            
             return Ok(rental.ToRentalDto());
         }
     }

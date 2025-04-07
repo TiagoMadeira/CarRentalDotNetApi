@@ -45,5 +45,10 @@ namespace api.Repository
 
         }
 
+        public async Task<Boolean> RentalExistsAsync(int id)
+        {
+            return await _context.Rentals.AnyAsync(v => v.Id == id);
+        }
+
     }
 }

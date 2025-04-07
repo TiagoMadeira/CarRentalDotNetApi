@@ -12,5 +12,7 @@ namespace api.Interfaces
         Task<Rental?> GetByIdAsync(int id);
 
         Task<Rental> CreateAsync(Rental rentalModel);
+
+        Task<bool>RentalExistsAsync(int id);
     }
 }
