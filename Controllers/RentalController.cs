@@ -54,5 +54,14 @@ namespace api.Controllers
             
             return Ok(rental.ToRentalDto());
         }
+
+        [Authorize]
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Cancel([FromRoute] int id){
+            
+            var rental = await _rentalManager.CancelAsync(id );
+            
+            return Ok(rental.ToRentalDto());
+        }
     }
 } 

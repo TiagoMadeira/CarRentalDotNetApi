@@ -35,5 +35,9 @@ namespace api.Models
         public bool Updatable(){
             return State()=="Upcoming";
         }
+
+        public bool Cancellable(){
+            return State()=="Upcoming";
+        }
     }
 }

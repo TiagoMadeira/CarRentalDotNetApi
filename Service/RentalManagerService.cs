@@ -48,11 +48,24 @@ namespace api.Service
                 throw new BadHttpRequestException("Rental is not updatable!");
             }
 
-
             var blockedDate = updateRentalRequestDto.ToBlockedDateFromUpdateRequestDto();
             ValidateBlockedDate(blockedDate);
             await _blockedDateRepo.UpdateAsync(rental.BlockedDateId, blockedDate);
             return rental;
+        }
+        
+        public async Task<Rental?> CancelAsync(int id){
+            var rental = await _rentalRepo.GetByIdAsync(id);
+
+            if(rental == null){
+                throw new BadHttpRequestException("Rental does not exist!");
+            }else if(!rental.Cancellable()){
+                throw new BadHttpRequestException("Rental is not cancellable");
+            }
+
+            await _rentalRepo.CancelAsync(rental);
+            return rental;
+
         }
 
         private void ValidateBlockedDate(BlockedDate blockedDate){

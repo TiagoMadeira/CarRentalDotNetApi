@@ -44,6 +44,12 @@ namespace api.Repository
             return rentalModel;
 
         }
+         public async Task<Rental?> CancelAsync(Rental existingRental)
+        {
+            existingRental.Cacelled=true
+            await _context.SaveChangesAsync();
+            return existingRental;
+        }
 
         public async Task<Boolean> RentalExistsAsync(int id)
         {
