@@ -38,12 +38,17 @@ namespace api.Service
         public async Task<Rental?> GetByIdAsync(int Id){
             return await _rentalRepo.GetByIdAsync(Id);
         }
+
         public async Task<Rental?> UpdateAsync(int id, UpdateRentalRequestDto updateRentalRequestDto)
         {
             var rental = await _rentalRepo.GetByIdAsync(id);
             if(rental == null){
-                throw new BadHttpRequestException("Rental does not exist");
+                throw new BadHttpRequestException("Rental does not exist!");
+            }else if(!rental.Updatable()){
+                throw new BadHttpRequestException("Rental is not updatable!");
             }
+
+
             var blockedDate = updateRentalRequestDto.ToBlockedDateFromUpdateRequestDto();
             ValidateBlockedDate(blockedDate);
             await _blockedDateRepo.UpdateAsync(rental.BlockedDateId, blockedDate);

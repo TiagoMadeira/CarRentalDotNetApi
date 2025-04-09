@@ -25,7 +25,7 @@ namespace api.Validation.InputValidators.cs
             .NotNull().WithMessage("VehicleId is required")
             .MustAsync(async (id, _ ) => 
             {return await vehicleRepo.VehicleExistsAsync(id);})
-            .WithMessage("Email already in use");
+            .WithMessage("Vehicle must exist");
         }
     }
 }

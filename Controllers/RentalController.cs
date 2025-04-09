@@ -50,7 +50,7 @@ namespace api.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateRentalRequestDto updateRentalRequestDto, IValidator<UpdateRentalRequestDto> validator){
             validator.ValidateAndThrow(updateRentalRequestDto);
-            var rental = _rentalManager.UpdateAsync(id,updateRentalRequestDto );
+            var rental = await _rentalManager.UpdateAsync(id,updateRentalRequestDto );
             
             return Ok(rental.ToRentalDto());
         }
