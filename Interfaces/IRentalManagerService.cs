@@ -11,6 +11,7 @@ namespace api.Interfaces
     {
         Task<Rental> CreateAsync(string userId, CreateRentalRequestDto createRentalRequestDto);
         Task<Rental?> GetByIdAsync(int Id);
+        Task<Rental?> CancelAsync(int Id);
         Task<Rental?> UpdateAsync(int Id, UpdateRentalRequestDto updateRentalRequestDto);
 
         

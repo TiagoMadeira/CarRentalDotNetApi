@@ -46,7 +46,7 @@ namespace api.Repository
         }
          public async Task<Rental?> CancelAsync(Rental existingRental)
         {
-            existingRental.Cacelled=true
+            existingRental.Cancelled = true;
             await _context.SaveChangesAsync();
             return existingRental;
         }

@@ -13,6 +13,8 @@ namespace api.Interfaces
 
         Task<Rental> CreateAsync(Rental rentalModel);
 
+        Task<Rental> CancelAsync(Rental existingRental);
+
         Task<bool>RentalExistsAsync(int id);
     }
 }
