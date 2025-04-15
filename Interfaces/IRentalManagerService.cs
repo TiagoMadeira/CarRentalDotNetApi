@@ -4,16 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Rentals;
 using api.Models;
+using api.Shared;
 
 namespace api.Interfaces
 {
     public interface IRentalManagerService
     {
-        Task<Rental> CreateAsync(string userId, CreateRentalRequestDto createRentalRequestDto);
-        Task<Rental?> GetByIdAsync(int Id);
-        Task<Rental?> CancelAsync(int Id);
-        Task<Rental?> UpdateAsync(int Id, UpdateRentalRequestDto updateRentalRequestDto);
-
-        
+        Task<Result<Rental>> CreateAsync(string userId, CreateRentalRequestDto createRentalRequestDto);
+        Task<Result<Rental>> GetByIdAsync(int Id);
+        Task<Result<Rental>> CancelAsync(int Id);
+        Task<Result<Rental>> UpdateAsync(int Id, UpdateRentalRequestDto updateRentalRequestDto);
     }
 }

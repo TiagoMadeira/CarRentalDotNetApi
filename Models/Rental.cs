@@ -32,12 +32,18 @@ namespace api.Models
             return state;
         }
 
-        public bool Updatable(){
+        public bool IsUpcoming(){
             return State()=="Upcoming";
         }
 
         public bool Cancellable(){
             return State()=="Upcoming";
         }
+
+        public bool RentalVehicleIsAvailable(DateOnly StartDate, DateOnly EndDate)
+        {
+            return Vehicle.IsVehicleAvailableExcludeRental(StartDate, EndDate, Id);
+        }
+       
     }
 }

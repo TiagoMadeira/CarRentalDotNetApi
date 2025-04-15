@@ -33,16 +33,38 @@ namespace api.Models
         public AppUser AppUser {get; set;}
 
         public Boolean IsVehicleAvailable(DateOnly StartDate, DateOnly EndDate){
-            if (Rentals == null){
-                return true;
+            if (HasRentals()){
+                return !DoRentalDatesOverllap(Rentals, StartDate, EndDate);
             }
-            foreach (Rental rental in Rentals){
-                if (DateHelperMethods.AreOverlapping(StartDate, EndDate, rental.BlockedDate.StartDate, rental.BlockedDate.EndDate)){
-                    return false;
-                }
+                return true;
+        }
+
+        //Check if the vehicle is available for given dates excluding given rental's dates
+        public Boolean IsVehicleAvailableExcludeRental(DateOnly StartDate, DateOnly EndDate, int RentalId)
+        {
+            if (HasRentals())
+            {
+                var ExcludedRentals = Rentals;
+                ExcludedRentals.RemoveAll(r => r.Id == RentalId);
+                return !DoRentalDatesOverllap(ExcludedRentals, StartDate, EndDate);  
             }
             return true;
-            
+
+        }
+
+        private bool HasRentals()
+        {
+            return Rentals !=null;
+        }
+
+        private bool DoRentalDatesOverllap(List<Rental> rentals, DateOnly StartDate, DateOnly EndDate)
+        {
+            foreach (Rental rental in rentals)
+            {
+                if (DateHelperMethods.AreOverlapping(StartDate, EndDate, rental.BlockedDate.StartDate, rental.BlockedDate.EndDate))
+                    return true ;
+            }
+            return false;
         }
     }
 }
