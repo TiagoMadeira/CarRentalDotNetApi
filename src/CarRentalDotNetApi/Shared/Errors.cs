@@ -17,6 +17,11 @@
         public static readonly Errors RentalDoesNotExist = new(new Dictionary<string, string[]> { { "Rental", ["Rental does exist"] } }, "Rental does exist");
         public static readonly Errors RentalVehicleDoesNotExist = new(new Dictionary<string, string[]> { { "Rental", ["Vehicle does not exist"] } }, "Vehicle");
         public static readonly Errors RentalVehicleIsNotAvailable = new(new Dictionary<string, string[]> { { "Rental", ["Vehicle is not available for input dates"] } }, "Vehicle is not available");
+    }
 
+    public static class AuthErrors
+    {
+        public static readonly Errors LoginError = new(new Dictionary<string, string[]> { { "Login", ["Username not found and or password incorrect!"] } }, "Login Error");
+        public static readonly Errors RegisterError = new(new Dictionary<string, string[]> { { "Register", ["User Could not be created"] } }, "Register Error");
     }
 }

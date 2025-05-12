@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Account;
+using api.Dtos.Rentals;
 using api.Interfaces;
 using api.Models;
 using api.Service;
@@ -28,22 +29,27 @@ namespace api.Controllers
         [HttpPost("login")]
          public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto, IValidator<LoginRequestDto> validator){
 
-            validator.ValidateAndThrow(loginRequestDto);
+            var result = await validator.ValidateAsync(loginRequestDto);
+            if (!result.IsValid) return BadRequest(result.ToDictionary());
+                
 
-            var loginDto = await _authService.LoginAsync(loginRequestDto);
-            
-            return Ok(loginDto);
+            var LoginResult = await _authService.LoginAsync(loginRequestDto);
+            if (!LoginResult.IsSuccess) return BadRequest(result.ToDictionary());
+
+            return Ok(LoginResult.Value);
             
 
          }
         [HttpPost ("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerDto, IValidator<RegisterRequestDto> validator){
-                
-            validator.ValidateAndThrow(registerDto);
 
-            var newUserDto = await _authService.RegisterAsync(registerDto);
+            var result = await validator.ValidateAsync(registerDto);
+            if (!result.IsValid) return BadRequest(result.ToDictionary());
+               
+            var RegisterResult = await _authService.RegisterAsync(registerDto);
+            if (!RegisterResult.IsSuccess) return BadRequest(result.ToDictionary());
 
-            return Ok(newUserDto);
+            return Ok(RegisterResult.Value);
                 
         }
     }

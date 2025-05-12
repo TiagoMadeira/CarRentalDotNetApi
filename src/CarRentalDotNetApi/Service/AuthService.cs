@@ -7,6 +7,8 @@ using api.Dtos.Account;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using api.Shared;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,21 +26,22 @@ namespace api.Service
             _signInManager = signInManager;
         }
 
-        public async Task<LoginDto> LoginAsync(LoginRequestDto loginRequestDto)
+        public async Task<Result<LoginDto>> LoginAsync(LoginRequestDto loginRequestDto)
         {
  
             var user = await _userManager.Users.FirstOrDefaultAsync(x=> x.Email == loginRequestDto.Email.ToLower());
-            if(user == null)throw new UnauthorizedAccessException("Username not found and or password incorrect!");
+            if (user == null) return Result<LoginDto>.Failure(AuthErrors.LoginError);
+               
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginRequestDto.Password, false);
-            if(!result.Succeeded)throw new UnauthorizedAccessException("Username not found and or password incorrect!");
+            if(!result.Succeeded) return Result<LoginDto>.Failure(AuthErrors.LoginError);
 
             var token = _tokenService.CreateToken(user);
 
-            return user.ToLoginDto(token);
+            return  Result<LoginDto>.Success(user.ToLoginDto(token));
 
         }
-        public async Task<AppUserDto> RegisterAsync(RegisterRequestDto registerRequestDto)
+        public async Task<Result<AppUserDto>> RegisterAsync(RegisterRequestDto registerRequestDto)
         {
             var appUser = new AppUser
                 {
@@ -46,16 +49,15 @@ namespace api.Service
                     Email = registerRequestDto.Email,
                 };
 
-                var createdUser = await _userManager.CreateAsync(appUser, registerRequestDto.Password);
+            var createdUser = await _userManager.CreateAsync(appUser, registerRequestDto.Password);
 
-                if(!createdUser.Succeeded)
-                    throw new SystemException("User was not created");
-                
-                var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
-                if(!roleResult.Succeeded)
-                    throw new SystemException("User roles not set");
-                
-                return appUser.ToAppUserDto();
+            if(!createdUser.Succeeded) return Result<AppUserDto>.Failure(AuthErrors.RegisterError);
+
+            var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
+                if(!roleResult.Succeeded) return Result<AppUserDto>.Failure(AuthErrors.RegisterError);
+
+
+            return Result<AppUserDto>.Success( appUser.ToAppUserDto());
                 
         }
     }
