@@ -8,7 +8,8 @@ namespace api.Models
 {
     public class AppUser : IdentityUser
     {  
-        public string Name {get; set;} = string.Empty;
+        public string Name {get; set;}
+        public string Email { get; set; }
         public List<Rental>? Rentals {get; set;}
         public List<Vehicle>? Vehicles {get; set;}
     }
