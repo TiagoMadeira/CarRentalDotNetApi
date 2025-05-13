@@ -17,22 +17,23 @@ namespace api.Service
     public class AuthService : IAuthService
     {   
         private readonly UserManager<AppUser> _userManager;
+        private readonly IUserRepository _userRepo;
         private readonly ITokenService _tokenService;
         private readonly SignInManager<AppUser> _signInManager;
-        public AuthService(UserManager<AppUser> userManager ,ITokenService tokenService, SignInManager<AppUser> signInManager)
+        public AuthService(UserManager<AppUser> userManager ,ITokenService tokenService, SignInManager<AppUser> signInManager, IUserRepository userRepo)
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _userRepo = userRepo;
             _signInManager = signInManager;
         }
 
         public async Task<Result<LoginDto>> LoginAsync(LoginRequestDto loginRequestDto)
         {
  
-            var user = await _userManager.Users.FirstOrDefaultAsync(x=> x.Email == loginRequestDto.Email.ToLower());
+            var user = await _userRepo.GetByEmailAsync(loginRequestDto.Email);
             if (user == null) return Result<LoginDto>.Failure(AuthErrors.LoginError);
                
-
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginRequestDto.Password, false);
             if(!result.Succeeded) return Result<LoginDto>.Failure(AuthErrors.LoginError);
 
@@ -45,8 +46,8 @@ namespace api.Service
         {
             var appUserModel = registerRequestDto.RegisterRequestDtoToAppUser();
 
-            var result = await _userManager.Users.AnyAsync(u => u.Email == appUserModel.Email);
-            if(result) return Result<AppUserDto>.Failure(AuthErrors.EmailAlreadyExistsrError);
+            var result = await _userRepo.UserExistsAsync(appUserModel.Email);
+            if (result) return Result<AppUserDto>.Failure(AuthErrors.EmailAlreadyExistsrError);
 
             var createdUser = await _userManager.CreateAsync(appUserModel, registerRequestDto.Password);
             if(!createdUser.Succeeded) return Result<AppUserDto>.Failure(AuthErrors.RegisterError);
