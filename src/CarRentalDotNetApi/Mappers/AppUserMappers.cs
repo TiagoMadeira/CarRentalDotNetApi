@@ -32,7 +32,7 @@ namespace api.Mappers
         {
             return new AppUser
             {
-                UserName = registerRequestDto.Username,
+                Name = registerRequestDto.Username,
                 Email = registerRequestDto.Email
             };
         }
