@@ -43,22 +43,18 @@ namespace api.Service
         }
         public async Task<Result<AppUserDto>> RegisterAsync(RegisterRequestDto registerRequestDto)
         {
-            var appUser = new AppUser
-                {
-                    Name = registerRequestDto.Username,
-                    Email = registerRequestDto.Email,
-                };
+            var appUserModel = registerRequestDto.RegisterRequestDtoToAppUser();
 
-            var createdUser = await _userManager.CreateAsync(appUser, registerRequestDto.Password);
+            var result = await _userManager.Users.AnyAsync(u => u.Email == appUserModel.Email);
+            if(result) return Result<AppUserDto>.Failure(AuthErrors.EmailAlreadyExistsrError);
 
+            var createdUser = await _userManager.CreateAsync(appUserModel, registerRequestDto.Password);
             if(!createdUser.Succeeded) return Result<AppUserDto>.Failure(AuthErrors.RegisterError);
 
-            var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
-                if(!roleResult.Succeeded) return Result<AppUserDto>.Failure(AuthErrors.RegisterError);
+            var roleResult = await _userManager.AddToRoleAsync(appUserModel, "User");
+            if(!roleResult.Succeeded) return Result<AppUserDto>.Failure(AuthErrors.RegisterError);
 
-
-            return Result<AppUserDto>.Success( appUser.ToAppUserDto());
-                
+            return Result<AppUserDto>.Success(appUserModel.ToAppUserDto());    
         }
     }
 }

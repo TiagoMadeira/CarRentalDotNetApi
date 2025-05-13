@@ -10,14 +10,14 @@ namespace api.Mappers
     public static class AppUserMappers
     {
         public static LoginDto ToLoginDto(this AppUser appUserModel, string token)
-       {
+        {
         return new LoginDto
         {
             UserName = appUserModel.Name,
             Email = appUserModel.Email, 
             Token = token
         };
-       } 
+        } 
 
        public static AppUserDto ToAppUserDto(this AppUser appUserModel)
        {
@@ -26,6 +26,15 @@ namespace api.Mappers
             UserName = appUserModel.Name ,
             Email = appUserModel.Email
         };
-       } 
+       }
+
+        public static AppUser RegisterRequestDtoToAppUser(this RegisterRequestDto registerRequestDto)
+        {
+            return new AppUser
+            {
+                UserName = registerRequestDto.Username,
+                Email = registerRequestDto.Email
+            };
+        }
     }
 }

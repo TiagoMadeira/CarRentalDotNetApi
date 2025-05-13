@@ -23,5 +23,6 @@
     {
         public static readonly Errors LoginError = new(new Dictionary<string, string[]> { { "Login", ["Username not found and or password incorrect!"] } }, "Login Error");
         public static readonly Errors RegisterError = new(new Dictionary<string, string[]> { { "Register", ["User Could not be created"] } }, "Register Error");
+        public static readonly Errors EmailAlreadyExistsrError = new(new Dictionary<string, string[]> { { "Register", ["User Could not be created"] } }, "Register Error");
     }
 }
