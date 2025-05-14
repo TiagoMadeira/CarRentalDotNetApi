@@ -28,9 +28,12 @@ namespace api.Service
             return Result<Vehicle>.Success(vehicleModel);
         }
 
-        public Task<Result<Vehicle>> GetByIdAsync(int Id)
+        public async Task<Result<Vehicle>> GetByIdAsync(int Id)
         {
-            throw new NotImplementedException();
+            var vehicle = await _vehicleRepo.GetByIdAsync(Id);
+            if (vehicle == null) return Result<Vehicle>.Failure(VehicleErrors.VehicleDoesExistError);
+
+            return Result<Vehicle>.Success(vehicle);
         }
 
 

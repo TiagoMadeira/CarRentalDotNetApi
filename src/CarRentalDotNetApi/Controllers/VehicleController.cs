@@ -42,12 +42,10 @@ namespace api.Controllers
         [Authorize]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id){
-            var vehicle = await _vehicleRepo.GetByIdAsync(id) ;
-            if(vehicle == null)
-            {
-                return NotFound();
-            }
-            return Ok(vehicle.ToVehicleDto());
+            var result = await _vehicleService.GetByIdAsync(id) ;
+            if (!result.IsSuccess) return BadRequest(result.Errors);
+   
+            return Ok(result.Value.ToVehicleDto());
         }
     }
 }
