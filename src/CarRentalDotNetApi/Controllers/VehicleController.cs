@@ -5,11 +5,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using api.Dtos.Rentals;
 using api.Dtos.Vehicles;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
 using api.Service;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +49,16 @@ namespace api.Controllers
             if (!result.IsSuccess) return BadRequest(result.Errors);
    
             return Ok(result.Value.ToVehicleDto());
+        }
+
+        [Authorize]
+        [HttpGet()]
+        public async Task<IActionResult> GetVehicles([FromQuery] VehicleQueryObject query)
+        {
+            var filterResult = await _vehicleService.FilterAsync(query);
+            if (!filterResult.IsSuccess) return BadRequest(filterResult.Errors);
+
+            return Ok(filterResult.Value.ToVehicleDto());
         }
     }
 }

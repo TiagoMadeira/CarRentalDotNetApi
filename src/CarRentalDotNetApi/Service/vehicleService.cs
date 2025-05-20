@@ -1,11 +1,16 @@
-﻿using api.Dtos.Rentals;
+﻿using System.Reflection;
+using api.Dtos.Rentals;
 using api.Dtos.Vehicles;
+using api.Helpers;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
 using api.Shared;
 using api.Validation;
+using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Newtonsoft.Json.Linq;
 
 namespace api.Service
 {
@@ -26,6 +31,20 @@ namespace api.Service
 
             var vehicleModel = await _vehicleRepo.CreateAsync(buildVehicleResult.Value);
             return Result<Vehicle>.Success(vehicleModel);
+        }
+
+        public async Task<Result<List<Vehicle>>> FilterAsync(VehicleQueryObject query)
+        {
+
+            //Validate query
+            var validationResult = ValidateVehicleQuery(query).Result;
+            if (!validationResult.IsValid)
+                return Result<List<Vehicle>>.Failure(new Errors(validationResult.ToDictionary(), "Vehicle Query Validation Error")); 
+
+            var vehicles = await _vehicleRepo.FilterVehiclesAsync(query);
+
+            return Result<List<Vehicle>>.Success(vehicles);
+
         }
 
         public async Task<Result<Vehicle>> GetByIdAsync(int Id)
@@ -53,5 +72,11 @@ namespace api.Service
             var VehicleValidator = new VehicleValidator();
             return await VehicleValidator.ValidateAsync(vehicleModel);
         }
+        private async Task<ValidationResult> ValidateVehicleQuery(VehicleQueryObject query)
+        {
+            var VehicleQueryValidator = new VehicleQueryValidator();
+            return await VehicleQueryValidator.ValidateAsync(query);
+        }
     }
+}
 }

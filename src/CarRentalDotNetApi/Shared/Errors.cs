@@ -28,6 +28,6 @@
 
     public static class VehicleErrors
     {
-        public static readonly Errors VehicleDoesExistError = new(new Dictionary<string, string[]> { { "Vehicle", ["Vehicle does not exist"] } }, "Login Error");
+        public static readonly Errors VehicleDoesExistError = new(new Dictionary<string, string[]> { { "Vehicle", ["Vehicle does not exist"] } }, "Vehicle search Error");
     }
 }
