@@ -14,11 +14,11 @@ using Newtonsoft.Json.Linq;
 
 namespace api.Service
 {
-    public class vehicleService : IVehicleService
+    public class VehicleService : IVehicleService
     {
         private readonly IVehicleRepository _vehicleRepo;
 
-        public vehicleService(IVehicleRepository vehicleRepo)
+        public VehicleService(IVehicleRepository vehicleRepo)
         {
             _vehicleRepo = vehicleRepo;
         }

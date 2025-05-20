@@ -12,10 +12,10 @@ namespace api.Validation
             .WithMessage("Vehicle must have an associated AppUserId");
 
             RuleFor(vehicle => vehicle.Model).NotNull().NotEmpty()
-            .WithMessage("vehcile must have brand");
+            .WithMessage("Vehicle must have model");
 
             RuleFor(vehicle => vehicle.Brand).NotNull().NotEmpty()
-           .WithMessage("vehcile must have brand");
+           .WithMessage("Vehicle must have brand");
         }
     }
 }
